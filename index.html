@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>谢彩莹 · 数据质检员</title>
+<meta name="description" content="谢彩莹的个人简历 — 数据质检员，半年机器人数据采集与质检实战经验，熟悉 UMI 采集、强化学习推理接管与数据质检全流程。" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0B0C0A;
+    --bg-panel: #10120E;
+    --bg-elev: #151710;
+    --line: #262A22;
+    --line-soft: #1B1E18;
+    --text: #E7EAE2;
+    --text-dim: #9AA093;
+    --text-faint: #5C6156;
+    --signal: #00E676;
+    --signal-dim: #00B85C;
+    --amber: #FFB800;
+    --mono: "JetBrains Mono", "Cascadia Code", "Consolas", "Menlo", monospace;
+    --sans: "JetBrains Mono", -apple-system, "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* faint technical grid, no grain */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.016) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.016) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---------- top bar ---------- */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(11,12,10,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar-inner {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--signal);
+    box-shadow: 0 0 0 0 rgba(0,230,118,0.5);
+    animation: pulse 2.4s infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(0,230,118,0.45); }
+    70% { box-shadow: 0 0 0 8px rgba(0,230,118,0); }
+    100% { box-shadow: 0 0 0 0 rgba(0,230,118,0); }
+  }
+  .brand .role { color: var(--text-dim); }
+  nav { display: flex; gap: 20px; }
+  nav a {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: color 0.15s;
+  }
+  nav a:hover { color: var(--signal); }
+  nav a .idx { color: var(--text-faint); }
+
+  /* ---------- sections ---------- */
+  section { padding: 72px 0; border-bottom: 1px solid var(--line-soft); }
+  section:last-of-type { border-bottom: none; }
+
+  .sec-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 36px;
+    font-family: var(--mono);
+  }
+  .sec-head .no { color: var(--signal); font-size: 13px; }
+  .sec-head h2 {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+  .sec-head .rule { flex: 1; height: 1px; background: var(--line); }
+
+  /* ---------- hero ---------- */
+  .hero { padding-top: 96px; padding-bottom: 88px; }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 56px;
+    align-items: start;
+  }
+  .kicker {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--signal);
+    margin-bottom: 20px;
+  }
+  .name {
+    font-size: clamp(40px, 8vw, 64px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: 0.01em;
+  }
+  .name .surname { color: var(--signal); }
+  .tagline {
+    margin-top: 18px;
+    font-family: var(--mono);
+    font-size: 15px;
+    color: var(--text-dim);
+    max-width: 40ch;
+  }
+  .tagline em { color: var(--text); font-style: normal; }
+
+  .contact {
+    border: 1px solid var(--line);
+    background: var(--bg-panel);
+  }
+  .contact .hd {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--text-faint);
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .contact table { width: 100%; border-collapse: collapse; }
+  .contact td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--line-soft);
+    font-family: var(--mono);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+  }
+  .contact td:last-child { border-bottom: none; }
+  .contact td.k { color: var(--text-faint); white-space: nowrap; }
+  .contact td.v { text-align: right; color: var(--text); }
+  .contact a { color: var(--signal); text-decoration: none; }
+  .contact a:hover { text-decoration: underline; }
+
+  /* 事前核对 → 事中记录 → 事后复查 */
+  .verify {
+    margin-top: 24px;
+    border: 1px solid var(--line);
+    background: var(--bg-panel);
+    padding: 18px 18px 14px;
+  }
+  .verify .hd {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--text-faint);
+    margin-bottom: 14px;
+  }
+  .verify .hd b { color: var(--text); font-weight: 500; }
+  .stages { display: flex; flex-direction: column; gap: 0; }
+  .stage {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text-dim);
+    border-bottom: 1px dashed var(--line-soft);
+    transition: color 0.25s;
+  }
+  .stage:last-child { border-bottom: none; }
+  .stage .box {
+    width: 18px; height: 18px;
+    border: 1px solid var(--text-faint);
+    flex-shrink: 0;
+    display: grid; place-items: center;
+    font-size: 11px;
+    color: var(--bg);
+    transition: all 0.3s;
+  }
+  .stage.done { color: var(--text); }
+  .stage.done .box {
+    background: var(--signal);
+    border-color: var(--signal);
+  }
+  .stage .lbl b { color: var(--text); font-weight: 500; }
+
+  /* ---------- work log ---------- */
+  .log { border: 1px solid var(--line); background: var(--bg-panel); }
+  .entry-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px 18px;
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--mono);
+  }
+  .entry-head .co {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.01em;
+  }
+  .entry-head .role {
+    font-size: 13px;
+    color: var(--signal);
+    border: 1px solid var(--signal-dim);
+    padding: 2px 8px;
+  }
+  .entry-head .meta {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--text-dim);
+    font-variant-numeric: tabular-nums;
+  }
+  .entry-head .status {
+    font-size: 11px;
+    color: var(--signal);
+    letter-spacing: 0.1em;
+  }
+
+  .module {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .module:last-child { border-bottom: none; }
+  .module .mno {
+    padding: 20px 0 20px 22px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-faint);
+    font-variant-numeric: tabular-nums;
+    border-right: 1px solid var(--line-soft);
+  }
+  .module .mbody { padding: 20px 22px 20px 20px; }
+  .module .mt {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .module .mt .chk { color: var(--signal); }
+  .module p {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.85;
+  }
+  .module p b { color: var(--text); font-weight: 500; }
+
+  /* ---------- education ---------- */
+  .edu { border: 1px solid var(--line); background: var(--bg-panel); }
+  .edu .entry-head { border-bottom: 1px solid var(--line); }
+  .edu-list { padding: 8px 22px 18px; }
+  .edu-item {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px dashed var(--line-soft);
+    font-size: 14px;
+    color: var(--text-dim);
+  }
+  .edu-item:last-child { border-bottom: none; }
+  .edu-item .chk { color: var(--signal); flex-shrink: 0; font-family: var(--mono); }
+  .edu-item b { color: var(--text); font-weight: 500; }
+
+  /* ---------- skills / strengths ---------- */
+  .strength-list { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--line); background: var(--bg-panel); }
+  .strength {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 20px;
+    padding: 16px 22px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .strength:last-child { border-bottom: none; }
+  .strength .sk {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--signal);
+    letter-spacing: 0.03em;
+    padding-top: 3px;
+  }
+  .strength p { font-size: 14px; color: var(--text-dim); line-height: 1.85; }
+  .strength p b { color: var(--text); font-weight: 500; }
+
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 28px;
+  }
+  .skill-tag {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    border: 1px solid var(--line);
+    padding: 6px 12px;
+    letter-spacing: 0.02em;
+  }
+  .skill-tag.hot { color: var(--signal); border-color: var(--signal-dim); }
+
+  /* ---------- footer ---------- */
+  footer {
+    padding: 40px 0 48px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-faint);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 24px;
+    justify-content: space-between;
+  }
+  footer a { color: var(--text-dim); text-decoration: none; }
+  footer a:hover { color: var(--signal); }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 760px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 36px; }
+    .hero { padding-top: 64px; padding-bottom: 64px; }
+    section { padding: 56px 0; }
+    nav { gap: 12px; }
+    nav a .idx { display: none; }
+    .module { grid-template-columns: 40px 1fr; }
+    .module .mno { padding-left: 14px; }
+    .module .mbody { padding: 18px 14px 18px 12px; }
+    .strength { grid-template-columns: 1fr; gap: 6px; }
+    .entry-head .meta { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#top">
+      <span class="dot"></span>
+      <span>谢彩莹</span>
+      <span class="role">· 数据质检员</span>
+    </a>
+    <nav>
+      <a href="#experience"><span class="idx">01</span> 经历</a>
+      <a href="#education"><span class="idx">02</span> 教育</a>
+      <a href="#strengths"><span class="idx">03</span> 优势</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="kicker">// 个人简历 · Resume</div>
+        <h1 class="name"><span class="surname">谢</span>彩莹</h1>
+        <p class="tagline">求职岗位：<em>数据质检员</em>。半年机器人数据采集与质检实战经验，熟悉 UMI 采集、强化学习推理接管、纯评测与数据质检全流程。</p>
+
+        <div class="verify">
+          <div class="hd"><b>工作方法论</b> · 事前核对 / 事中记录 / 事后复查</div>
+          <div class="stages" id="stages">
+            <div class="stage" data-s="0">
+              <span class="box">✓</span>
+              <span class="lbl"><b>事前核对</b> — 方案核对、物资验收，先确认再动手</span>
+            </div>
+            <div class="stage" data-s="1">
+              <span class="box">✓</span>
+              <span class="lbl"><b>事中记录</b> — 执行过程留痕，异常即时记录反馈</span>
+            </div>
+            <div class="stage" data-s="2">
+              <span class="box">✓</span>
+              <span class="lbl"><b>事后复查</b> — 复盘总结，可追溯、可复现</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="contact">
+        <div class="hd">个人信息 · CONTACT</div>
+        <table>
+          <tr><td class="k">姓名</td><td class="v">谢彩莹</td></tr>
+          <tr><td class="k">岗位</td><td class="v">数据质检员</td></tr>
+          <tr><td class="k">电话</td><td class="v"><a href="tel:13025151869">13025151869</a></td></tr>
+          <tr><td class="k">邮箱</td><td class="v"><a href="mailto:3470013274@qq.com">3470013274@qq.com</a></td></tr>
+          <tr><td class="k">性别</td><td class="v">女</td></tr>
+          <tr><td class="k">出生年月</td><td class="v">2006-5</td></tr>
+        </table>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============ 工作经历 ============ -->
+  <section id="experience">
+    <div class="wrap">
+      <div class="sec-head"><span class="no">01</span><h2>工作经历</h2><span class="rule"></span></div>
+
+      <div class="log">
+        <div class="entry-head">
+          <span class="co">深圳自变量机器人科技有限公司</span>
+          <span class="role">数据采集员</span>
+          <span class="meta">2026.04 — 2026.09</span>
+          <span class="status">● 已完成</span>
+        </div>
+
+        <div class="module">
+          <div class="mno">[01]</div>
+          <div class="mbody">
+            <div class="mt"><span class="chk">✓</span> UMI 数据采集与场景搭建</div>
+            <p>在绿幕环境下执行 <b>UMI 模式数据采集</b>，按任务要求搭建居家场景，利用转盘等装置轮换杯垫、杯子等物品。完成搅拌豆子、拉拉链、折纸盒等精细动作采集，覆盖<b>抓取、放置、开合</b>等操作类型。通过变换物体位置、角度与场景布局，积累物体多样性与动作多样性训练数据。</p>
+          </div>
+        </div>
+
+        <div class="module">
+          <div class="mno">[02]</div>
+          <div class="mbody">
+            <div class="mt"><span class="chk">✓</span> 模型训练支持与推理评测</div>
+            <p>参与<b>模仿学习数据采集</b>及<b>强化学习推理接管</b>任务，保障大模型训练数据供给。独立执行推理与评测任务，在接管过程中同步完成模型输出打分与质量判定。承担纯评测任务，对模型全自动执行结果进行人工评分、异常记录与问题反馈。</p>
+          </div>
+        </div>
+
+        <div class="module">
+          <div class="mno">[03]</div>
+          <div class="mbody">
+            <div class="mt"><span class="chk">✓</span> 算法协作与采集优化</div>
+            <p>对接算法工程师，参与绿幕算法精细化任务，为难例场景提供预训练数据支持。根据任务框架<b>编写采集脚本</b>，针对「抓取」等单一动作更换不同物体，丰富训练数据多样性。就长程任务子任务划分、机械臂极限位置等问题主动向算法与运营反馈，推动数采 SOP 更新迭代。</p>
+          </div>
+        </div>
+
+        <div class="module">
+          <div class="mno">[04]</div>
+          <div class="mbody">
+            <div class="mt"><span class="chk">✓</span> SOP 制定与设备维护</div>
+            <p>参与数采 SOP 制定，结合实操提出桌面位置划线标准（以机械臂极限位置为上限）等改进，降低碰撞与越界风险。制定设备问题汇总 SOP，梳理常见故障类型与修复步骤。独立处理日常设备故障，包括路由器线路排查、机械臂极限位下砸断电定位、容器重启/整机重启等。建立故障频率统计机制，判断问题根因位于大模型侧或硬件侧，推动机械臂更换等硬件决策。编写代码协助组员适配新采集系统，并负责教学培训。</p>
+          </div>
+        </div>
+
+        <div class="module">
+          <div class="mno">[05]</div>
+          <div class="mbody">
+            <div class="mt"><span class="chk">✓</span> 数据质检与异常判定</div>
+            <p>熟悉质检全流程，掌握<b>数据质量标签、动作质量定义、错误瑕疵分类</b>及软硬件异常判定。可独立执行接管触发时机检查、摇操动作规范核查、子任务终态对齐、接管时限合规检查及终止回零检查。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 教育背景 ============ -->
+  <section id="education">
+    <div class="wrap">
+      <div class="sec-head"><span class="no">02</span><h2>教育背景</h2><span class="rule"></span></div>
+
+      <div class="edu">
+        <div class="entry-head">
+          <span class="co">广东女子职业技术学院</span>
+          <span class="role">学前教育</span>
+          <span class="meta">2024.09 — 2026.06</span>
+        </div>
+        <div class="edu-list">
+          <div class="edu-item"><span class="chk">✓</span><span>担任<b>校学生会秘书长</b>，负责大型活动全流程跟进，从方案核对、物资验收到现场执行、复盘总结，养成「事前核对、事中记录、事后复查」的工作习惯，契合质检岗位对严谨性和可追溯性的要求。</span></div>
+          <div class="edu-item"><span class="chk">✓</span><span>建立共享文件库，制定文档命名与归档规范，核心资料查找时间<b>减少 50%</b>，具备规范化整理与可追溯管理能力。</span></div>
+          <div class="edu-item"><span class="chk">✓</span><span>荣获<b>校级奖学金</b>、专业技能节大赛<b>一等奖</b>。</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 个人优势 ============ -->
+  <section id="strengths">
+    <div class="wrap">
+      <div class="sec-head"><span class="no">03</span><h2>个人优势</h2><span class="rule"></span></div>
+
+      <div class="strength-list">
+        <div class="strength"><span class="sk">实战经验</span><p>拥有<b>半年</b>机器人数据采集与质检实战经验，熟悉 UMI 采集、强化学习推理接管、纯评测及数据质检全流程。</p></div>
+        <div class="strength"><span class="sk">质检能力</span><p>掌握数据质量标签、动作质量定义、错误瑕疵分类及软硬件异常判定，可独立执行各项质检检查。</p></div>
+        <div class="strength"><span class="sk">SOP 与运维</span><p>参与数采 SOP 与设备问题汇总 SOP 制定，具备设备故障排查能力，可处理网络、机械臂极限位断电、容器/整机重启等问题。</p></div>
+        <div class="strength"><span class="sk">算法协作</span><p>可对接算法工程师参与绿幕算法精细化任务，能编写采集脚本、积累物体多样性数据，并协助组员适配新采集系统与培训。</p></div>
+        <div class="strength"><span class="sk">学习与习惯</span><p>跨专业学习力强，曾任校学生会秘书长，具备文档归档与规范化管理习惯；细致抗压，可接受加班。</p></div>
+      </div>
+
+      <div class="skill-tags">
+        <span class="skill-tag hot">数据质检</span>
+        <span class="skill-tag hot">UMI 采集</span>
+        <span class="skill-tag">强化学习 · 推理接管</span>
+        <span class="skill-tag">SOP 制定</span>
+        <span class="skill-tag">Python / C++ 基础</span>
+        <span class="skill-tag">Linux / Shell</span>
+        <span class="skill-tag">Claude Code</span>
+        <span class="skill-tag">Excel</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap" style="display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-between;width:100%;">
+    <span>谢彩莹 · 数据质检员</span>
+    <span>© <span id="yr"></span> · 简历在线版</span>
+    <span><a href="tel:13025151869">13025151869</a> · <a href="mailto:3470013274@qq.com">3470013274@qq.com</a></span>
+  </div>
+</footer>
+
+<script>
+  // 年份
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // 三段式质检流程：滚动进视口时逐格打勾
+  const stages = document.querySelectorAll('.stage');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        const list = e.target.closest('.stages');
+        list.querySelectorAll('.stage').forEach((s, i) => {
+          setTimeout(() => s.classList.add('done'), i * 260);
+        });
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.6 });
+
+  if (stages.length) obs.observe(stages[0]);
+</script>
+
+</body>
+</html>
